@@ -33,7 +33,6 @@ def top1top5words(spa_words, eng_dict, eng_pred, common_words_list):
     for i in range(eng_pred.shape[0]):
         diff = np.sum(np.square(eng_pred[i], common_words), axis=1)
         diff_args = np.argsort(diff)
-        eng_word = eng_words[i]
         top1 = common_words_list[diff_args[0]]
         top5 = [common_words_list[diff_args[j]] for j in range(5)]
         dict1[spa_words[i]] = top1
@@ -82,15 +81,16 @@ if __name__ == '__main__':
                 saver.restore(sess, os.path.join(folder, 'model.ckpt'))
                 eng_vectors_predict = model.predict(sess, test_data[:,0], spa_dict)
                 dill.dump(eng_vectors_predict, open('eng_predict', 'wb'))
-        # Perform evaluation 1
+        
         with open('../common_words.txt', 'r') as f:
             common_words_list = f.readlines()
         for i,line in enumerate(common_words_list):
             common_words_list[i] = line.strip()
-        a1, a5 = top1top5accuracy(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
-        print('Top 1 accuracy: ' + str(a1))
-        print('Top 5 accuracy: ' + str(a5))
-        print(20*'*')
+        # Perform evaluation 1
+        # a1, a5 = top1top5accuracy(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
+        # print('Top 1 accuracy: ' + str(a1))
+        # print('Top 5 accuracy: ' + str(a5))
+        # print(20*'*')
         # Perform evaluation 2
         spanish_words = ['regresar', 'cabra', 'parecer', 'otras', 'encantado', 'lengua', 'mike', 'hables', 'poder']
         corr_eng_words, indices = [], []
