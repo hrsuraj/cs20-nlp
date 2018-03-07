@@ -87,7 +87,7 @@ if __name__ == '__main__':
             common_words_list = f.readlines()
         for i,line in enumerate(common_words_list):
             common_words_list[i] = line.strip()
-        a1, a5 = top1top5(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
+        a1, a5 = top1top5accuracy(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
         print('Top 1 accuracy: ' + str(a1))
         print('Top 5 accuracy: ' + str(a5))
         print(20*'*')
