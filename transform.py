@@ -15,7 +15,8 @@ def top1top5accuracy(eng_pred, eng_words, eng_dict, common_words_list):
     common_words = [eng_dict[word] for word in common_words_list]
     common_words = np.array(common_words)
     for i in range(eng_pred.shape[0]):
-        diff = cosine_similarity(eng_pred[i].reshape(1, len(eng_pred[i])), common_words)
+        # diff = cosine_similarity(eng_pred[i].reshape(1, len(eng_pred[i])), common_words)
+        diff = np.sum(np.square(eng_pred[i] - common_words), axis=1)
         diff_args = np.argsort(diff.flatten())
         eng_word = eng_words[i]
         pred_word = common_words_list[diff_args[0]]
@@ -32,7 +33,8 @@ def top1top5words(spa_words, eng_dict, eng_pred, common_words_list):
     common_words = [eng_dict[word] for word in common_words_list]
     common_words = np.array(common_words)
     for i in range(eng_pred.shape[0]):
-        diff = cosine_similarity(eng_pred[i].reshape(1, len(eng_pred[i])), common_words)
+        # diff = cosine_similarity(eng_pred[i].reshape(1, len(eng_pred[i])), common_words)
+        diff = np.sum(np.square(eng_pred[i] - common_words), axis=1)
         diff_args = np.argsort(diff.flatten())
         top1 = common_words_list[diff_args[0]]
         top5 = [common_words_list[diff_args[j]] for j in range(5)]

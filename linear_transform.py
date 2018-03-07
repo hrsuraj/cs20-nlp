@@ -70,7 +70,7 @@ class Transform(object):
         return epoch_loss
 
     def fit(self, sess, train_data, eng_dict, spa_dict, minibatch_size=64, num_epochs=50, folder='./', graph_folder='./'):
-        saver = tf.train.Saver()
+        saver = tf.train.Saver(max_to_keep=100)
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
         epoch_loss, self.minibatch_count = [], 0
         for i in range(num_epochs):
