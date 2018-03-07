@@ -68,7 +68,7 @@ class Transform(object):
         saver = tf.train.Saver()
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
         for i in range(num_epochs):
-            epoch_folder = folder + 'epoch_' + str(i+1) + '/'
+            epoch_folder = os.path.join(folder, 'epoch_'+str(i+1))
             os.mkdir(epoch_folder)
             self.run_epoch(sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size)
-            saver.save(sess, epoch_folder+'model.ckpt')
+            saver.save(sess, os.path.join(epoch_folder,'model.ckpt'))
