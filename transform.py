@@ -19,6 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--train_data', dest='train_data')
     parser.add_argument('--test_data', dest='test_data')
     parser.add_argument('--folder', default='./', dest='folder')
+    parser.add_argument('--graphs', default='./', dest='graph_folder')
     args = parser.parse_args()
 
     spa_dict = dill.load(open(args.spa_dict, 'rb'))
@@ -30,12 +31,13 @@ if __name__ == '__main__':
         num_epochs = args.num_epochs
         train_data = dill.load(open(args.train_data, 'rb'))
         folder = args.folder
+        graph_folder = args.graph_folder
         with tf.Graph().as_default():
             model = Transform(learning_rate)
             init = tf.global_variables_initializer()
             with tf.Session() as sess:
                 sess.run(init)
-                model.fit(sess, train_data, eng_dict, spa_dict, minibatch_size, num_epochs, folder)
+                model.fit(sess, train_data, eng_dict, spa_dict, minibatch_size, num_epochs, folder, graph_folder)
     else:
         test_data = dill.load(open(args.test_data, 'rb'))
         with tf.Graph().as_default():

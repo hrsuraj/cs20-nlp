@@ -22,7 +22,7 @@ class Transform(object):
             feed_dict[self.labels] = labels
         return feed_dict
 
-    def add_placeholders(self, inputs, labels):
+    def add_placeholders(self):
         self.inputs = tf.placeholder(shape=(None,300), dtype=tf.float32)
         self.labels = tf.placeholder(shape=(None,300), dtype=tf.float32)
 
@@ -64,9 +64,9 @@ class Transform(object):
             summary = self.train_batch(sess=sess, inputs=m_inputs, labels=m_labels)
             writer.add_summary(self.summary)
 
-    def fit(self, sess, train_data, eng_dict, spa_dict, minibatch_size=64, num_epochs=50, folder='./'):
+    def fit(self, sess, train_data, eng_dict, spa_dict, minibatch_size=64, num_epochs=50, folder='./', graph_folder='./'):
         saver = tf.train.Saver()
-        writer = tf.summary.FileWriter('graphs', sess.graph)
+        writer = tf.summary.FileWriter(graph_folder, sess.graph)
         for i in range(num_epochs):
             epoch_folder = folder + 'epoch_' + str(i+1) + '/'
             os.makedir(epoch_folder)
