@@ -1,5 +1,6 @@
 import dill
 import numpy as np
+import os
 import tensorflow as tf
 import argparse
 
@@ -44,6 +45,6 @@ if __name__ == '__main__':
             model = Transform()
             saver = tf.train.Saver()
             with tf.Session() as sess:
-                saver.restore(sess, folder+'model.ckpt')
+                saver.restore(sess, os.path.join(folder, 'model.ckpt'))
                 eng_vectors_predict = model.predict(sess, test_data[:,0], spa_dict)
                 dill.dump(eng_vectors_predict, open('eng_predict', 'wb'))
