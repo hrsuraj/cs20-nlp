@@ -69,6 +69,6 @@ class Transform(object):
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
         for i in range(num_epochs):
             epoch_folder = folder + 'epoch_' + str(i+1) + '/'
-            os.makedir(epoch_folder)
+            os.mkdir(epoch_folder)
             self.run_epoch(sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size)
             saver.save(sess, epoch_folder+'model.ckpt')
