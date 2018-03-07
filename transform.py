@@ -2,6 +2,7 @@ import dill
 import numpy as np
 import os
 import tensorflow as tf
+import time
 import argparse
 
 from linear_transform import Transform
@@ -55,8 +56,11 @@ if __name__ == '__main__':
     parser.add_argument('--graphs', default='../graphs', dest='graph_folder')
     args = parser.parse_args()
 
+    t1 = time.time()
     spa_dict = dill.load(open(args.spa_dict, 'rb'))
     eng_dict = dill.load(open(args.eng_dict, 'rb'))
+    t2 = time.time()
+    print('Time to load the two dictionaries: ' + str(t2-t1))
     folder = args.folder
 
     if args.mode == 'train':
@@ -71,6 +75,8 @@ if __name__ == '__main__':
             with tf.Session() as sess:
                 sess.run(init)
                 model.fit(sess, train_data, eng_dict, spa_dict, minibatch_size, num_epochs, folder, graph_folder)
+        t3 = time.time()
+        print('Time to train the model: ' + str(t3-t2))
     else:
         test_data = dill.load(open(args.test_data, 'rb'))
         with tf.Graph().as_default():

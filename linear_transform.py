@@ -30,7 +30,7 @@ class Transform(object):
         self.output = tf.layers.dense(inputs=self.inputs, units=300, kernel_initializer=tf.contrib.layers.xavier_initializer())
 
     def add_loss_op(self):
-        self.loss = tf.reduce_mean(tf.square(self.output - self.labels))
+        self.loss = tf.reduce_sum(tf.square(self.output - self.labels))
 
     def add_train_op(self):
         self.train = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
@@ -54,8 +54,6 @@ class Transform(object):
     def run_epoch(self, sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size):
         num_minibatches = int(len(train_data) / minibatch_size)
         minibatch_data = np.array_split(train_data, num_minibatches)
-        print(len(minibatch_data))
-        print(len(minibatch_data[0]))
         epoch_loss = 0
         for i in range(len(minibatch_data)):
             m_inputs, m_labels = [], []
