@@ -8,7 +8,7 @@ from linear_transform import Transform
 
 ###############################################################################
 
-def top1top5(eng_pred, eng_words, eng_dict, common_words_list):
+def top1top5accuracy(eng_pred, eng_words, eng_dict, common_words_list):
     accuracy1, accuracy5 = 0, 0
     common_words = [eng_dict[word] for word in common_words_list]
     common_words = np.array(common_words)
@@ -20,9 +20,25 @@ def top1top5(eng_pred, eng_words, eng_dict, common_words_list):
         pred_word = common_words_list[diff_args[0]]
         if eng_word == pred_word:
             accuracy1 += 1.0
-        if eng_word in [common_words_list[diff_args[j]] for j in range(5)]::
+        if eng_word in [common_words_list[diff_args[j]] for j in range(5)]:
             accuracy5 += 1.0
     return accuracy1/len(eng_pred), accuracy5/len(eng_pred)
+
+###############################################################################
+
+def top1top5words(spa_words, eng_dict, eng_pred, common_words_list):
+    dict1, dict5 = {}, {}
+    common_words = [eng_dict[word] for word in common_words_list]
+    common_words = np.array(common_words)
+    for i in range(eng_pred.shape[0]):
+        diff = np.sum(np.square(eng_pred[i], common_words), axis=1)
+        diff_args = np.argsort(diff)
+        eng_word = eng_words[i]
+        top1 = common_words_list[diff_args[0]]
+        top5 = [common_words_list[diff_args[j]] for j in range(5)]
+        dict1[spa_words[i]] = top1
+        dict5[spa_words[i]] = top5
+    return dict1, dict5
 
 ###############################################################################
 
@@ -66,9 +82,26 @@ if __name__ == '__main__':
                 saver.restore(sess, os.path.join(folder, 'model.ckpt'))
                 eng_vectors_predict = model.predict(sess, test_data[:,0], spa_dict)
                 dill.dump(eng_vectors_predict, open('eng_predict', 'wb'))
-        # Perform evaluation
-        with open('common_words.txt', 'r') as f:
+        # Perform evaluation 1
+        with open('../common_words.txt', 'r') as f:
             common_words_list = f.readlines()
         for i,line in enumerate(common_words_list):
-            common_words_list[i] = line.split('\n')[0]
-        top1top5(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
+            common_words_list[i] = line.strip()
+        a1, a5 = top1top5(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
+        print('Top 1 accuracy: ' + str(a1))
+        print('Top 5 accuracy: ' + str(a5))
+        print(20*'*')
+        # Perform evaluation 2
+        spanish_words = ['regresar', 'cabra', 'parecer', 'otras', 'encantado', 'lengua', 'mike', 'hables', 'poder']
+        corr_eng_words, indices = [], []
+        for word in spanish_words:
+            index = list(test_data[:,0]).index(word)
+            indices.append(index)
+            corr_eng_words.append(test_data[index, 1])
+        eng_pred = eng_vectors_predict[indices]
+        dict1, dict5 = top1top5words(spanish_words, eng_dict, eng_pred, common_words_list)
+        for word in spanish_words:
+            print(word)
+            print('Top 1 closest word: ' + dict1[word])
+            print('Top 5 closest words: ' + ', '.join(dict5[word]))
+            print(20*'*')
