@@ -87,10 +87,10 @@ if __name__ == '__main__':
         for i,line in enumerate(common_words_list):
             common_words_list[i] = line.strip()
         # Perform evaluation 1
-        # a1, a5 = top1top5accuracy(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
-        # print('Top 1 accuracy: ' + str(a1))
-        # print('Top 5 accuracy: ' + str(a5))
-        # print(20*'*')
+        a1, a5 = top1top5accuracy(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
+        print('Top 1 accuracy: ' + str(a1))
+        print('Top 5 accuracy: ' + str(a5))
+        print(20*'*')
         # Perform evaluation 2
         spanish_words = ['regresar', 'cabra', 'parecer', 'otras', 'encantado', 'lengua', 'mike', 'hables', 'poder']
         corr_eng_words, indices = [], []
