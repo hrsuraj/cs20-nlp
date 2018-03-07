@@ -1,9 +1,10 @@
 import dill
 import numpy as np
 import os
+import argparse
+from sklearn.metrics.pairwise import cosine_similarity
 import tensorflow as tf
 import time
-import argparse
 
 from linear_transform import Transform
 
@@ -14,8 +15,8 @@ def top1top5accuracy(eng_pred, eng_words, eng_dict, common_words_list):
     common_words = [eng_dict[word] for word in common_words_list]
     common_words = np.array(common_words)
     for i in range(eng_pred.shape[0]):
-        diff = np.sum(np.square(eng_pred[i], common_words), axis=1)
-        diff_args = np.argsort(diff)
+        diff = cosine_similarity(eng_pred[i].reshape(1, len(eng_pred[i])), common_words)
+        diff_args = np.argsort(diff.flatten())
         eng_word = eng_words[i]
         pred_word = common_words_list[diff_args[0]]
         if eng_word == pred_word:
@@ -31,8 +32,8 @@ def top1top5words(spa_words, eng_dict, eng_pred, common_words_list):
     common_words = [eng_dict[word] for word in common_words_list]
     common_words = np.array(common_words)
     for i in range(eng_pred.shape[0]):
-        diff = np.sum(np.square(eng_pred[i], common_words), axis=1)
-        diff_args = np.argsort(diff)
+        diff = cosine_similarity(eng_pred[i].reshape(1, len(eng_pred[i])), common_words)
+        diff_args = np.argsort(diff.flatten())
         top1 = common_words_list[diff_args[0]]
         top5 = [common_words_list[diff_args[j]] for j in range(5)]
         dict1[spa_words[i]] = top1
