@@ -25,13 +25,13 @@ if __name__ == '__main__':
 
     spa_dict = dill.load(open(args.spa_dict, 'rb'))
     eng_dict = dill.load(open(args.eng_dict, 'rb'))
-
+    folder = args.folder
+    
     if args.mode == 'train':
         learning_rate = args.lr
         minibatch_size = args.minibatch_size
         num_epochs = args.num_epochs
         train_data = dill.load(open(args.train_data, 'rb'))
-        folder = args.folder
         graph_folder = args.graph_folder
         with tf.Graph().as_default():
             model = Transform(learning_rate)
