@@ -27,7 +27,7 @@ class Transform(object):
         self.labels = tf.placeholder(shape=(None,300), dtype=tf.float32)
 
     def forward_prop(self):
-        self.output = tf.layers.dense(inputs=self.inputs, units=300, kernel_initializer=tf.contrib.layers.xavier_initializer(uniform=False))
+        self.output = tf.layers.dense(inputs=self.inputs, units=300, kernel_initializer=tf.contrib.layers.xavier_initializer())
 
     def add_loss_op(self):
         self.loss = tf.reduce_mean(tf.square(self.output - self.labels))

@@ -12,17 +12,16 @@ def top1top5accuracy(eng_pred, eng_words, eng_dict, common_words_list):
     accuracy1, accuracy5 = 0, 0
     common_words = [eng_dict[word] for word in common_words_list]
     common_words = np.array(common_words)
-    print(common_words.shape)
     for i in range(eng_pred.shape[0]):
         diff = np.sum(np.square(eng_pred[i], common_words), axis=1)
         diff_args = np.argsort(diff)
         eng_word = eng_words[i]
         pred_word = common_words_list[diff_args[0]]
         if eng_word == pred_word:
-            accuracy1 += 1.0
+            accuracy1 += 1
         if eng_word in [common_words_list[diff_args[j]] for j in range(5)]:
-            accuracy5 += 1.0
-    return accuracy1/len(eng_pred), accuracy5/len(eng_pred)
+            accuracy5 += 1
+    return accuracy1/float(len(eng_pred)), accuracy5/float(len(eng_pred))
 
 ###############################################################################
 
@@ -53,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--train_data', dest='train_data')
     parser.add_argument('--test_data', dest='test_data')
     parser.add_argument('--folder', default='./', dest='folder')
-    parser.add_argument('--graphs', default='./', dest='graph_folder')
+    parser.add_argument('--graphs', default='../graphs', dest='graph_folder')
     args = parser.parse_args()
 
     spa_dict = dill.load(open(args.spa_dict, 'rb'))
