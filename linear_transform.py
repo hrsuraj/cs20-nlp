@@ -62,7 +62,7 @@ class Transform(object):
             m_inputs, m_labels = np.array(m_inputs), np.array(m_labels)
             # Train on the minibatch and add to the summary
             summary = self.train_batch(sess=sess, inputs=m_inputs, labels=m_labels)
-            writer.add_summary(self.summary)
+            writer.add_summary(summary)
 
     def fit(self, sess, train_data, eng_dict, spa_dict, minibatch_size=64, num_epochs=50, folder='./', graph_folder='./'):
         saver = tf.train.Saver()
