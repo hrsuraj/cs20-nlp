@@ -48,12 +48,15 @@ class Transform(object):
 
     def train_batch(self, sess, inputs, labels):
         feed_dict = self.create_feed_dict(inputs=inputs, labels=labels)
-        _, _, summary = sess.run([self.loss, self.train, self.summary], feed_dict=feed_dict)
-        return summary
+        loss, _, summary = sess.run([self.loss, self.train, self.summary], feed_dict=feed_dict)
+        return loss, summary
 
     def run_epoch(self, sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size):
         num_minibatches = int(len(train_data) / minibatch_size)
         minibatch_data = np.array_split(train_data, num_minibatches)
+        print(len(minibatch_data))
+        print(len(minibatch_data[0]))
+        epoch_loss = 0
         for i in range(len(minibatch_data)):
             m_inputs, m_labels = [], []
             for word_pair in minibatch_data[i]:
@@ -61,14 +64,21 @@ class Transform(object):
                 m_labels.append(eng_dict[word_pair[1]])
             m_inputs, m_labels = np.array(m_inputs), np.array(m_labels)
             # Train on the minibatch and add to the summary
-            summary = self.train_batch(sess=sess, inputs=m_inputs, labels=m_labels)
+            loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels=m_labels)
+            epoch_loss += loss
             writer.add_summary(summary)
+        epoch_loss /= float(len(minibatch_data))
+        return epoch_loss
 
     def fit(self, sess, train_data, eng_dict, spa_dict, minibatch_size=64, num_epochs=50, folder='./', graph_folder='./'):
         saver = tf.train.Saver()
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
+        epoch_loss = []
         for i in range(num_epochs):
             epoch_folder = os.path.join(folder, 'epoch_'+str(i+1))
             os.mkdir(epoch_folder)
-            self.run_epoch(sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size)
+            epoch_loss.append(self.run_epoch(sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size))
             saver.save(sess, os.path.join(epoch_folder,'model.ckpt'))
+        with open(os.path.join(folder,'loss.txt'), 'w') as f:
+            for val in epoch_loss:
+                f.write(str(val) + '\n')
