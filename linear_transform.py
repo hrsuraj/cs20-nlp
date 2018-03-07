@@ -64,14 +64,15 @@ class Transform(object):
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels=m_labels)
             epoch_loss += loss
-            writer.add_summary(summary)
+            writer.add_summary(summary, global_step=self.minibatch_count)
+            self.minibatch_count += 1
         epoch_loss /= float(len(minibatch_data))
         return epoch_loss
 
     def fit(self, sess, train_data, eng_dict, spa_dict, minibatch_size=64, num_epochs=50, folder='./', graph_folder='./'):
         saver = tf.train.Saver()
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
-        epoch_loss = []
+        epoch_loss, self.minibatch_count = [], 0
         for i in range(num_epochs):
             epoch_folder = os.path.join(folder, 'epoch_'+str(i+1))
             os.mkdir(epoch_folder)
