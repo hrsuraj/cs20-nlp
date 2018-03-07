@@ -54,7 +54,7 @@ class Transform(object):
     def run_epoch(self, sess, saver, writer, train_data, eng_dict, spa_dict, minibatch_size):
         num_minibatches = int(len(train_data) / minibatch_size)
         minibatch_data = np.array_split(train_data, num_minibatches)
-        for i in len(minibatch_data):
+        for i in range(len(minibatch_data)):
             m_inputs, m_labels = [], []
             for word_pair in minibatch_data[i]:
                 m_inputs.append(spa_dict[word_pair[0]])
