@@ -8,6 +8,24 @@ from linear_transform import Transform
 
 ###############################################################################
 
+def top1top5(eng_pred, eng_words, eng_dict, common_words_list):
+    accuracy1, accuracy5 = 0, 0
+    common_words = [eng_dict[word] for word in common_words_list]
+    common_words = np.array(common_words)
+    print(common_words.shape)
+    for i in range(eng_pred.shape[0]):
+        diff = np.sum(np.square(eng_pred[i], common_words), axis=1)
+        diff_args = np.argsort(diff)
+        eng_word = eng_words[i]
+        pred_word = common_words_list[diff_args[0]]
+        if eng_word == pred_word:
+            accuracy1 += 1.0
+        if eng_word in [common_words_list[diff_args[j]] for j in range(5)]::
+            accuracy5 += 1.0
+    return accuracy1/len(eng_pred), accuracy5/len(eng_pred)
+
+###############################################################################
+
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description = 'Runs linear transform on word vectors')
@@ -26,7 +44,7 @@ if __name__ == '__main__':
     spa_dict = dill.load(open(args.spa_dict, 'rb'))
     eng_dict = dill.load(open(args.eng_dict, 'rb'))
     folder = args.folder
-    
+
     if args.mode == 'train':
         learning_rate = args.lr
         minibatch_size = args.minibatch_size
@@ -48,3 +66,9 @@ if __name__ == '__main__':
                 saver.restore(sess, os.path.join(folder, 'model.ckpt'))
                 eng_vectors_predict = model.predict(sess, test_data[:,0], spa_dict)
                 dill.dump(eng_vectors_predict, open('eng_predict', 'wb'))
+        # Perform evaluation
+        with open('common_words.txt', 'r') as f:
+            common_words_list = f.readlines()
+        for i,line in enumerate(common_words_list):
+            common_words_list[i] = line.split('\n')[0]
+        top1top5(eng_vectors_predict, test_data[:,1], eng_dict, common_words_list)
