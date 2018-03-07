@@ -4,7 +4,7 @@ import tensorflow as tf
 
 class Transform(object):
 
-    def __init__(lr=1e-3):
+    def __init__(self, lr=1e-3):
         self.lr = lr
         self.build()
 
