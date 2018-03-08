@@ -17,7 +17,7 @@ if __name__ == '__main__':
     punctuation = punctuation.replace('@','')
     punctuation = punctuation.replace('#','')
     punctuation = punctuation.replace('_','')
-    table = str.maketrans('', '', punctuation)
+    # table = str.maketrans('', '', punctuation)
 
     # Read the file
     with open(args.read_path, 'r') as f:
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     for i, line in enumerate(data):
         tweet = line.split('\n')[0]
         tweet = tweet.split()
-        tweet = [word.translate(table) for word in tweet]
+        tweet = [word.translate(None, punctuation) for word in tweet]
         tweet = [word.lower() for word in tweet]
         data[i] = tweet
 
