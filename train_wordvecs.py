@@ -35,11 +35,10 @@ if __name__ == '__main__':
             sess.run(init)
             cbow.fit(sess, inputs, minibatch_size=args.minibatch_size, num_epochs=args.num_epochs, folder=args.folder, graph_folder=args.graphs)
     else:
-        with tf.Graph().as_default():
-            model = cbow
-            saver = tf.train.Saver()
-            folder = args.models_folder
-            with tf.Session() as sess:
-                saver.restore(sess, os.path.join(folder, 'model.ckpt'))
-                word_vecs = model.init_vec
-                dill.dump(word_vecs, open('word_vecs', 'wb'))
+        model = cbow
+        saver = tf.train.Saver()
+        folder = args.models_folder
+        with tf.Session() as sess:
+            saver.restore(sess, os.path.join(folder, 'model.ckpt'))
+            word_vecs = model.init_vec
+            dill.dump(word_vecs, open('word_vecs', 'wb'))
