@@ -25,7 +25,7 @@ if __name__ == '__main__':
     train_data = np.load(open('lm_train_data.npy','r'))
     train_labels = np.load(open('lm_train_labels.npy','r'))
     
-    lm = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.vocab_len, args.minibatch_size)
+    lm = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
     init = tf.global_variables_initializer()
     
     # Fit the model
