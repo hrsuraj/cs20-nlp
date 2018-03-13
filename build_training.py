@@ -11,7 +11,7 @@ def gen_data():
 
 	train_data = []
 	train_labels = []
-	for sentence in tqdm(tweets_idx, length = len(tweets_idx)):
+	for sentence in tqdm(tweets_idx, total = len(tweets_idx)):
 		sent_vec = []
 		label_vec = []
 		
