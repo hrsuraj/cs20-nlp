@@ -82,6 +82,7 @@ class LanguageModel(object):
                 m_inputs.append(j)
             for k in minibatch_labels[i]:
                 zero_vec = np.zeros(shape = (self.vocab_len,))
+                print k
                 if k < self.vocab_len:
                     zero_vec[k] = 1.0
                 m_labels.append(zero_vec)
