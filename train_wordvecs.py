@@ -11,8 +11,9 @@ from cbow import CBOW
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='Trains word vectors with CBOW model')
-    parser.add_argument('--init_vec', required=True, dest='init_vec')
-    parser.add_argument('--train_samples', required=True, dest='samples')
+    parser.add_argument('-m', required=True, choices=['train', 'test'], dest='mode')
+    parser.add_argument('--init_vec', required=False, dest='init_vec')
+    parser.add_argument('--train_samples', required=False, dest='samples')
     parser.add_argument('--lr', type=float, default=1e-3, dest='lr')
     parser.add_argument('--minibatch_size', type=int, default=64, dest='minibatch_size')
     parser.add_argument('--num_epochs', type=int, default=100, dest='num_epochs')
@@ -30,6 +31,15 @@ if __name__ == '__main__':
     inputs = dill.load(open(args.samples,'rb'))
     
     # Fit the model
-    with tf.Session() as sess:
-        sess.run(init)
-        cbow.fit(sess, inputs, minibatch_size=args.minibatch_size, num_epochs=args.num_epochs, folder=args.folder, graph_folder=args.graphs)
+    if args.mode == 'train':
+        with tf.Session() as sess:
+            sess.run(init)
+            cbow.fit(sess, inputs, minibatch_size=args.minibatch_size, num_epochs=args.num_epochs, folder=args.folder, graph_folder=args.graphs)
+    else:
+        with tf.Graph().as_default():
+            saver = tf.train.Saver()
+            folder = args.models_folder
+            with tf.Session() as sess:
+                saver.restore(sess, os.path.join(folder, 'model.ckpt'))
+                word_vecs = cbow.init_vec
+                dill.dump(word_vecs, open('word_vecs', 'wb'))
