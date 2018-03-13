@@ -54,7 +54,7 @@ def gen_data():
 	np.save(open("lm_train_data.npy","w"), train_data)
 	np.save(open("lm_train_labels.npy","w"), train_labels)
 
-test_gather()
-# gen_data()
+# test_gather()
+gen_data()
 
 
