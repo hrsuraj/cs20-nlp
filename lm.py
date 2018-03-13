@@ -51,8 +51,7 @@ class LanguageModel(object):
 
     def add_loss_op(self):
         # Compute cross entropy for each frame.
-        labels = self.labels.reshape((self.labels.shape[0],self.labels.shape[1]))
-        cross_entropy = tf.one_hot(indices = labels, depth = self.vocab_len) * tf.log(self.logits)
+        cross_entropy = tf.one_hot(indices = self.labels, depth = self.vocab_len) * tf.log(self.logits)
         cross_entropy = -tf.reduce_sum(cross_entropy, 2)
         mask = tf.sign(tf.reduce_max(tf.abs(self.labels), 2))
         cross_entropy *= mask
@@ -82,12 +81,7 @@ class LanguageModel(object):
             for j in minibatch_train[i]:
                 m_inputs.append(j)
             for k in minibatch_labels[i]:
-                lab = []
-                for idx in k:
-                    zero_vec = np.zeros(self.vocab_len,)
-                    zero_vec[idx] = 1.0
-                    lab.append(zero_vec)
-                m_labels.append(lab)
+                m_labels.append(k)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
             # Train on the minibatch and add to the summary
