@@ -51,8 +51,7 @@ class LanguageModel(object):
 
     def add_loss_op(self):
         # Compute cross entropy for each frame.
-        labels = tf.one_hot(indices = self.labels, depth = self.vocab_len)
-        cross_entropy = labels * tf.log(self.logits)
+        cross_entropy = self.labels * tf.log(self.logits)
         cross_entropy = -tf.reduce_sum(cross_entropy, 2)
         mask = tf.sign(tf.reduce_max(tf.abs(labels), 2))
         cross_entropy *= mask
