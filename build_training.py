@@ -33,7 +33,7 @@ def gen_data():
 	print train_data.shape
 	print train_labels.shape
 
-	np.save(open("lm_trian_data.npy","w"), train_data)
+	np.save(open("lm_train_data.npy","w"), train_data)
 	np.save(open("lm_train_labels.npy","w"), train_labels)
 
 gen_data()

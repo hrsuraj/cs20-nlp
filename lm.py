@@ -4,12 +4,12 @@ import tensorflow as tf
 
 class LanguageModel(object):
 
-    def __init__(self, lr=1e-3, hsizes, num_steps, vocab_len, batch_size):
+    def __init__(self, lr=1e-3, num_steps = 56, vocab_len = 19800, batch_size = 64, hsizes = [300,300]):
         self.lr = lr
         self.hidden_sizes = hsizes
         self.vocab_len = vocab_len
         self.num_steps = num_steps
-        self.batch_size
+        self.batch_size = batch_size
         self.build()
 
     def build(self):
@@ -59,12 +59,6 @@ class LanguageModel(object):
         cross_entropy /= tf.reduce_sum(mask, 1)
         self.loss = tf.reduce_mean(cross_entropy)
 
-        # seq = tf.one_hot(self.input, self.vocab_len)
-        # forward_prop(seq)
-        # loss = tf.nn.softmax_cross_entropy_with_logits(logits=self.logits[:, :-1], 
-        #                                                 labels=seq[:, 1:])
-        # self.loss = tf.reduce_sum(loss)
-
     def add_train_op(self):
         self.train = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
 
@@ -97,7 +91,7 @@ class LanguageModel(object):
         epoch_loss /= float(len(minibatch_train))
         return epoch_loss
 
-    def fit(self, sess, train_data, train_labels, num_epochs=50, folder='./', graph_folder='./'):
+    def fit(self, sess, train_data, train_labels, num_epochs, folder='./', graph_folder='./'):
         saver = tf.train.Saver(max_to_keep=100)
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
         epoch_loss, self.minibatch_count = [], 0
@@ -109,11 +103,3 @@ class LanguageModel(object):
         with open(os.path.join(folder,'loss.txt'), 'w') as f:
             for val in epoch_loss:
                 f.write(str(val) + '\n')
-
-    # def predict(self, sess, test_data, spa_dict):
-    #     inputs = []
-    #     for word in test_data:
-    #         inputs.append(spa_dict[word])
-    #     inputs = np.array(inputs)
-    #     feed_dict = self.create_feed_dict(inputs=inputs)
-    #     return sess.run(self.output, feed_dict=feed_dict)
