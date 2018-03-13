@@ -27,7 +27,8 @@ class LanguageModel(object):
         return feed_dict
 
     def add_placeholders(self):
-        self.input = tf.placeholder(shape=(self.batch_size, self.num_steps, None), dtype=tf.float32)
+        self.inputs = tf.placeholder(shape=(self.batch_size, self.num_steps, None), dtype=tf.float32)
+        self.labels = tf.placeholder(shape=(self.batch_size, self.num_steps, None), dtype=tf.float32)
 
     def length(sequence):
         used = tf.sign(tf.reduce_max(tf.abs(sequence), 2))
@@ -43,7 +44,7 @@ class LanguageModel(object):
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
-        self.output, _ = tf.nn.dynamic_rnn(cells, seq, length(self.input), self.in_state)
+        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, length(self.inputs), self.in_state)
 
         self.logits = tf.layers.dense(self.output, self.vocab_len, activation=None)
 
