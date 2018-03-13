@@ -40,5 +40,5 @@ if __name__ == '__main__':
         folder = args.folder
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
-            word_vecs = model.init_vec
+            word_vecs = sess.run(model.init_vec)
             dill.dump(word_vecs, open('word_vecs', 'wb'))
