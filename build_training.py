@@ -17,12 +17,14 @@ def gen_data():
 		for idx in sentence:
 			sent_vec.append(word_vector[idx])
 		for j in range(1,len(sentence)):
-			label_vec.append(word_vector[sentence[j]])
+			zero_vec = list(np.zeros(len(w2i.keys()),))
+			zero_vec[sentence[j]] = 1.0
+			label_vec.append(zero_vec)
 		
 		for i in range(max_len - len(sent_vec)):
 			sent_vec.append(np.zeros(300,))
 		for k in range(max_len - len(label_vec)):
-			label_vec.append(np.zeros(300,))
+			label_vec.append(np.zeros(len(w2i.keys()),))
 		
 		train_data.append(sent_vec)
 		train_labels.append(label_vec)
@@ -32,6 +34,8 @@ def gen_data():
 
 	print train_data.shape
 	print train_labels.shape
+
+	print train_data[0,0:2,:]
 
 	np.save(open("lm_train_data.npy","w"), train_data)
 	np.save(open("lm_train_labels.npy","w"), train_labels)
