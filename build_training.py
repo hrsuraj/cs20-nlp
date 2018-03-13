@@ -40,7 +40,7 @@ def gen_data():
 		for i in range(max_len - len(sent_vec)):
 			sent_vec.append(dummy_300)
 		for k in range(max_len - len(label_vec)):
-			label_vec.append(-1)
+			label_vec.append(vocab_len + 1)
 		
 		train_data.append(sent_vec)
 		train_labels.append(label_vec)

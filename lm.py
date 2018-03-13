@@ -82,7 +82,10 @@ class LanguageModel(object):
             for j in minibatch_train[i]:
                 m_inputs.append(j)
             for k in minibatch_labels[i]:
-                m_labels.append(k)
+                zero_vec = np.zeros(shape = (self.vocab_len,))
+                if k < self.vocab_len:
+                    zero_vec[k] = 1.0
+                m_labels.append(zero_vec)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
             # Train on the minibatch and add to the summary
