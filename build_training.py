@@ -1,6 +1,20 @@
 import numpy as np
+import tensorflow as tf
 import dill
 from tqdm import tqdm
+
+def test_gather():
+
+	a = tf.random_uniform(shape = [5,5,10])
+	idx = np.array([[range(5)] for x in range(5)])
+	print idx.shape
+	idx = idx.reshape((5,5))
+	
+	a_oh = tf.one_hot(indices = idx, depth = 10, axis = -1)
+
+	sess = tf.Session()
+	print sess.run(a_oh)
+
 
 def gen_data():
 	tweets = dill.load(open("tweets", "rb"))
@@ -21,9 +35,7 @@ def gen_data():
 		for idx in sentence:
 			sent_vec.append(word_vector[idx])
 		for j in range(1,len(sentence)):
-			zero_vec = np.zeros(vocab_len,)
-			zero_vec[sentence[j]] = 1.0
-			label_vec.append(zero_vec)
+			label_vec.append(sentence[j])
 		
 		for i in range(max_len - len(sent_vec)):
 			sent_vec.append(dummy_300)
@@ -42,5 +54,7 @@ def gen_data():
 	np.save(open("lm_train_data.npy","w"), train_data)
 	np.save(open("lm_train_labels.npy","w"), train_labels)
 
-gen_data()
+test_gather()
+# gen_data()
+
 
