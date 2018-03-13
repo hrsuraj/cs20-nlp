@@ -26,3 +26,9 @@ def gen_data():
 		train_data.append(sent_vec)
 		train_labels.append(label_vec)
 
+	train_data = np.array(train_data)
+	train_labels = np.array(train_labels)
+
+	print train_data.shape
+	print train_labels.shape
+
