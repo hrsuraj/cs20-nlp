@@ -6,6 +6,7 @@ def gen_data():
 	w2i = dill.load(open("w2i","rb"))
 	word_vector = dill.load(open("word_vecs","rb"))
 	tweets_idx = [[w2i[i] for i in item] for item in tweets]
+	max_len = max([len(item) for item in tweets])
 
 	train_data = []
 	train_labels = []
