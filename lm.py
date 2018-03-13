@@ -43,7 +43,7 @@ class LanguageModel(object):
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
-        self.output, _ = tf.nn.dynamic_rnn(cells, seq, sequenece_length = length(self.input), self.in_state)
+        self.output, _ = tf.nn.dynamic_rnn(cells, seq, length(self.input), self.in_state)
 
         self.logits = tf.layers.dense(self.output, self.vocab_len, activation=None)
 
