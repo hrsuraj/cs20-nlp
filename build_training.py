@@ -33,8 +33,8 @@ def gen_data():
 	print train_data.shape
 	print train_labels.shape
 
-	dill.dump(train_data, open("lm_trian_data","wb"))
-	dill.dump(train_labels, open("lm_train_labels","wb"))
+	np.save(open("lm_trian_data.npy","w"), train_data)
+	np.save(open("lm_train_labels.npy","w"), train_labels)
 
 gen_data()
 
