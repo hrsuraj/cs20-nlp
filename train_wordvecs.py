@@ -37,7 +37,7 @@ if __name__ == '__main__':
     else:
         model = cbow
         saver = tf.train.Saver()
-        folder = args.models_folder
+        folder = args.folder
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
             word_vecs = model.init_vec
