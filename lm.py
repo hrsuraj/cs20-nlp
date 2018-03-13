@@ -4,9 +4,9 @@ import tensorflow as tf
 
 class LanguageModel(object):
 
-    def __init__(self, lr=1e-3, num_steps = 56, vocab_len = 19800, batch_size = 64, hsizes = [300,300]):
+    def __init__(self, lr=1e-3, num_steps = 56, vocab_len = 19800, batch_size = 64):
         self.lr = lr
-        self.hidden_sizes = hsizes
+        self.hidden_sizes = [300, 300]
         self.vocab_len = vocab_len
         self.num_steps = num_steps
         self.batch_size = batch_size
