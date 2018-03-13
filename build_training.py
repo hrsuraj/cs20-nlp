@@ -1,5 +1,6 @@
 import numpy as np
 import dill
+from tqdm import tqdm
 
 def gen_data():
 	tweets = dill.load(open("tweets", "rb"))
@@ -10,7 +11,7 @@ def gen_data():
 
 	train_data = []
 	train_labels = []
-	for sentence in tweets_idx:
+	for sentence in tqdm(tweets_idx, length = len(tweets_idx)):
 		sent_vec = []
 		label_vec = []
 		
