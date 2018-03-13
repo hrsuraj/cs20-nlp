@@ -84,6 +84,7 @@ class LanguageModel(object):
                 m_labels.append(k)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
+            print m_labels.shape
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs)
             epoch_loss += loss
