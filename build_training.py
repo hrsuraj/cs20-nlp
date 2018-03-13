@@ -32,3 +32,5 @@ def gen_data():
 	print train_data.shape
 	print train_labels.shape
 
+gen_data()
+
