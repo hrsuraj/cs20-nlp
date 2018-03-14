@@ -81,6 +81,7 @@ class LanguageModel(object):
             for j in minibatch_train[i]:
                 m_inputs.append(j)
             for k in minibatch_labels[i]:
+                print minibatch_labels[i].shape
                 sent_labs = []
                 for idx in k:
                     zero_vec = np.zeros(shape = (self.vocab_len,))
