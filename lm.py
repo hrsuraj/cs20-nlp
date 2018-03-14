@@ -81,13 +81,16 @@ class LanguageModel(object):
             for j in minibatch_train[i]:
                 m_inputs.append(j)
             for k in minibatch_labels[i]:
-                zero_vec = np.zeros(shape = (self.vocab_len,))
-                print k
-                if k < self.vocab_len:
-                    zero_vec[k] = 1.0
-                m_labels.append(zero_vec)
+                sent_labs = []
+                for idx in k:
+                    zero_vec = np.zeros(shape = (self.vocab_len,))
+                    if k < self.vocab_len:
+                        zero_vec[k] = 1.0
+                    sent_labs.append(zero_vec)
+                m_labels.append(sent_labs)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
+            print m_labels.shape
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels = m_labels)
             epoch_loss += loss
