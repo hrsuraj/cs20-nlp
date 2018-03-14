@@ -27,8 +27,8 @@ class LanguageModel(object):
         return feed_dict
 
     def add_placeholders(self):
-        self.inputs = tf.placeholder(shape=(self.batch_size, self.num_steps, 300), dtype=tf.float32)
-        self.labels = tf.placeholder(shape=(self.batch_size, self.num_steps, self.vocab_len), dtype=tf.float32)
+        self.inputs = tf.placeholder(shape=(None, self.num_steps, 300), dtype=tf.float32)
+        self.labels = tf.placeholder(shape=(None, self.num_steps, self.vocab_len), dtype=tf.float32)
 
     def length_max(self, sequence):
         used = tf.sign(tf.reduce_max(tf.abs(sequence), 2))
@@ -40,7 +40,8 @@ class LanguageModel(object):
 
         layers = [tf.nn.rnn_cell.GRUCell(size) for size in self.hidden_sizes]
         cells = tf.nn.rnn_cell.MultiRNNCell(layers)
-        zero_states = cells.zero_state(self.batch_size, dtype=tf.float32)
+        batch_size = (self.inputs.get_shape.as_list())[0]
+        zero_states = cells.zero_state(batch_size, dtype=tf.float32)
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
@@ -94,7 +95,6 @@ class LanguageModel(object):
                 m_labels.append(sent_labs)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
-            print m_labels.shape
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels = m_labels)
             epoch_loss += loss
