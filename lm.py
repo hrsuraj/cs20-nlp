@@ -32,12 +32,6 @@ class LanguageModel(object):
         self.inputs = tf.placeholder(shape=(None, self.num_steps, 300), dtype=tf.float32)
         self.labels = tf.placeholder(shape=(None, self.num_steps, self.vocab_len), dtype=tf.float32)
 
-    def length_max(self, sequence):
-        used = tf.sign(tf.reduce_max(tf.abs(sequence), 2))
-        length = tf.reduce_sum(used, 1)
-        length = tf.cast(length, tf.int32)
-        return length
-
     def forward_prop(self):
 
         layers = [tf.nn.rnn_cell.GRUCell(size) for size in self.hidden_sizes]
@@ -46,21 +40,21 @@ class LanguageModel(object):
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
-        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, self.length_max(self.inputs), self.in_state)
+        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, self.num_steps, self.in_state)
 
         self.logits = tf.layers.dense(self.output, self.vocab_len, activation=None)
 
 
     def add_loss_op(self):
         # Compute cross entropy for each frame.
-        cross_entropy = self.labels * tf.log(self.logits)
-        cross_entropy = -tf.reduce_sum(cross_entropy, 2)
-        mask = tf.sign(tf.reduce_max(tf.abs(self.labels), 2))
-        cross_entropy *= mask
-        # Average over actual sequence lengths.
-        cross_entropy = tf.reduce_sum(cross_entropy, 1)
-        cross_entropy /= tf.reduce_sum(mask, 1)
-        self.loss = tf.reduce_mean(cross_entropy)
+        # cross_entropy = self.labels * tf.log(self.logits)
+        # cross_entropy = -tf.reduce_sum(cross_entropy, 2)
+        # mask = tf.sign(tf.reduce_max(tf.abs(self.labels), 2))
+        # cross_entropy *= mask
+        # # Average over actual sequence lengths.
+        # cross_entropy = tf.reduce_sum(cross_entropy, 1)
+        # cross_entropy /= tf.reduce_sum(mask, 1)
+        self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels = self.labels, logits = self.logits))
 
     def add_train_op(self):
         self.train = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
@@ -94,9 +88,7 @@ class LanguageModel(object):
                 m_labels.append(sent_labs)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
-
-            print m_inputs.shape
-            print m_labels.shape
+            
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels = m_labels)
             epoch_loss += loss
