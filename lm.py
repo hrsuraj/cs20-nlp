@@ -40,8 +40,8 @@ class LanguageModel(object):
 
         layers = [tf.nn.rnn_cell.GRUCell(size) for size in self.hidden_sizes]
         cells = tf.nn.rnn_cell.MultiRNNCell(layers)
-        batch_size = (self.inputs.get_shape().as_list())[0]
-        zero_states = cells.zero_state(batch_size, dtype=tf.float32)
+        # batch_size = (self.inputs.get_shape().as_list())[0]
+        zero_states = cells.zero_state(self.batch_size, dtype=tf.float32)
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
@@ -73,7 +73,7 @@ class LanguageModel(object):
         return loss, summary
 
     def run_epoch(self, sess, saver, writer, train_data, train_labels):
-        num_minibatches = int(train_data.shape[0] / float(self.batch_size))
+        num_minibatches = int(train_data.shape[0] / (self.batch_size-1))
         minibatch_train = np.array_split(train_data, num_minibatches)
         minibatch_labels = np.array_split(train_labels, num_minibatches)
         epoch_loss = 0
