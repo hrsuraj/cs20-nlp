@@ -75,11 +75,13 @@ class LanguageModel(object):
         num_minibatches = int(train_data.shape[0] / float(self.batch_size))
         minibatch_train = np.array_split(train_data, num_minibatches)
         minibatch_labels = np.array_split(train_labels, num_minibatches)
-        print minibatch_train.shape
-        print minibatch_labels.shape
         epoch_loss = 0
         for i in range(len(minibatch_train)):
             m_inputs, m_labels = [],[]
+            
+            print minibatch_train[i].shape
+            print minibatch_labels[i].shape
+
             for j in minibatch_train[i]:
                 m_inputs.append(j)
             for k in minibatch_labels[i]:
