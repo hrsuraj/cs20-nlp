@@ -40,8 +40,7 @@ class LanguageModel(object):
 
         layers = [tf.nn.rnn_cell.GRUCell(size) for size in self.hidden_sizes]
         cells = tf.nn.rnn_cell.MultiRNNCell(layers)
-        batch_size = (self.inputs.get_shape().as_list())[0]
-        zero_states = cells.zero_state(batch_size, dtype=tf.float32)
+        zero_states = cells.zero_state(self.batch_size, dtype=tf.float32)
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
