@@ -31,6 +31,7 @@ if __name__ == '__main__':
     # Fit the model
     if args.mode == 'train':
         with tf.Session() as sess:
+            sess.run(init)
             lm.fit(sess, train_data, train_labels, num_epochs=args.num_epochs, folder=args.folder, graph_folder=args.graphs)
     # else:
     #     model = cbow
