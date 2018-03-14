@@ -72,7 +72,7 @@ class LanguageModel(object):
         return loss, summary
 
     def run_epoch(self, sess, saver, writer, train_data, train_labels):
-        num_minibatches = int(train_data.shape[0] / (self.batch_size-1))
+        num_minibatches = int(train_data.shape[0] / self.batch_size)
         minibatch_train = np.array_split(train_data, num_minibatches)
         minibatch_labels = np.array_split(train_labels, num_minibatches)
         epoch_loss = 0
