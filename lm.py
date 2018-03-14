@@ -84,8 +84,8 @@ class LanguageModel(object):
                 sent_labs = []
                 for idx in k:
                     zero_vec = np.zeros(shape = (self.vocab_len,))
-                    if k < self.vocab_len:
-                        zero_vec[k] = 1.0
+                    if idx < self.vocab_len:
+                        zero_vec[idx] = 1.0
                     sent_labs.append(zero_vec)
                 m_labels.append(sent_labs)
             m_inputs = np.array(m_inputs)
