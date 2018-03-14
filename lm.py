@@ -2,6 +2,8 @@ import numpy as np
 import os
 import tensorflow as tf
 
+from tqdm import tqdm
+
 class LanguageModel(object):
 
     def __init__(self, lr=1e-3, num_steps = 56, vocab_len = 19800, batch_size = 64):
@@ -92,6 +94,9 @@ class LanguageModel(object):
                 m_labels.append(sent_labs)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
+
+            print m_inputs.shape
+            print m_labels.shape
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels = m_labels)
             epoch_loss += loss
