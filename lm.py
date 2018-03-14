@@ -32,6 +32,12 @@ class LanguageModel(object):
         self.inputs = tf.placeholder(shape=(None, self.num_steps, 300), dtype=tf.float32)
         self.labels = tf.placeholder(shape=(None, self.num_steps, self.vocab_len), dtype=tf.float32)
 
+    def length_max(self, sequence):
+        used = tf.sign(tf.reduce_max(tf.abs(sequence), 2))
+        length = tf.reduce_sum(used, 1)
+        length = tf.cast(length, tf.int32)
+        return length
+
     def forward_prop(self):
 
         layers = [tf.nn.rnn_cell.GRUCell(size) for size in self.hidden_sizes]
@@ -40,7 +46,7 @@ class LanguageModel(object):
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
-        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, self.num_steps, self.in_state)
+        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, self.length_max(self.inputs), self.in_state)
 
         self.logits = tf.layers.dense(self.output, self.vocab_len, activation=None)
 
@@ -88,7 +94,7 @@ class LanguageModel(object):
                 m_labels.append(sent_labs)
             m_inputs = np.array(m_inputs)
             m_labels = np.array(m_labels)
-            
+
             # Train on the minibatch and add to the summary
             loss, summary = self.train_batch(sess=sess, inputs=m_inputs, labels = m_labels)
             epoch_loss += loss
