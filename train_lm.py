@@ -40,7 +40,7 @@ if __name__ == '__main__':
         word_vector = dill.load(open("word_vecs","rb"))
 
         start_wd = "@hillaryclinton"
-        inputs = np.array([[word_vecs[w2i[start_wd]]]])
+        inputs = np.array([[word_vector[w2i[start_wd]]]])
 
         model = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
         saver = tf.train.Saver()
