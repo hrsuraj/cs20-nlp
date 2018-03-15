@@ -21,23 +21,34 @@ if __name__ == '__main__':
     parser.add_argument('--graph_folder', default='../lm_graph', dest='graphs')
     args = parser.parse_args()
     
-    # Read the initial word vectors
-    train_data = np.load(open('lm_train_data.npy','r'))
-    train_labels = np.load(open('lm_train_labels.npy','r'))
-    
-    lm = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
-    init = tf.global_variables_initializer()
-    
     # Fit the model
+
     if args.mode == 'train':
+        # Read the initial word vectors
+        train_data = np.load(open('lm_train_data.npy','r'))
+        train_labels = np.load(open('lm_train_labels.npy','r'))
+        
+        lm = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
+        init = tf.global_variables_initializer()
+
         with tf.Session() as sess:
             sess.run(init)
             lm.fit(sess, train_data, train_labels, num_epochs=args.num_epochs, folder=args.folder, graph_folder=args.graphs)
-    # else:
-    #     model = cbow
-    #     saver = tf.train.Saver()
-    #     folder = args.folder
-    #     with tf.Session() as sess:
-    #         saver.restore(sess, os.path.join(folder, 'model.ckpt'))
-    #         word_vecs = sess.run(model.init_vec)
-    #         dill.dump(word_vecs, open('word_vecs', 'wb'))
+    else:
+        tweets = dill.load(open("tweets", "rb"))
+        w2i = dill.load(open("w2i","rb"))
+        word_vector = dill.load(open("word_vecs","rb"))
+
+        start_wd = "@hillaryclinton"
+        inputs = np.array([[word_vecs[w2i[start_wd]]]])
+
+        model = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
+        saver = tf.train.Saver()
+        folder = args.folder
+
+        with tf.Session() as sess:
+            saver.restore(sess, os.path.join(folder, 'model.ckpt'))
+            for i in range(1):
+                feed_dict = self.create_feed_dict(inputs=inputs)   
+                probs = sess.run(self.logits, feed_dict = feed_dict)
+                print probs.shape
