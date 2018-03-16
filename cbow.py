@@ -62,7 +62,6 @@ class CBOW(object):
             summary = self.train_batch(sess, minibatch_inputs[i], minibatch_labels[i])
             writer.add_summary(summary, global_step=self.minibatch_count)
             self.minibatch_count += 1
-            print('Minibatch ' + str(i) + ' out of : ' + str(len(minibatch_inputs)))
     
     def fit(self, sess, inputs, minibatch_size=64, num_epochs=100, folder='./', graph_folder='./', embed_data_path='./'):
         saver = tf.train.Saver(max_to_keep=200)
@@ -81,6 +80,7 @@ class CBOW(object):
             epoch_folder = os.path.join(folder, 'epoch_'+str(i+1))
             os.mkdir(epoch_folder)
             saver.save(sess, os.path.join(epoch_folder, 'model.ckpt'))
+            print('Epoch ' + str(i+1) + ' completed')
         # Visualizing embeddings
         final_embed = sess.run(self.word_vecs)
         config = projector.ProjectorConfig()
