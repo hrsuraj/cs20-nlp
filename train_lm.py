@@ -40,8 +40,8 @@ if __name__ == '__main__':
         i2w = dill.load(open("i2w","rb"))
         word_vector = dill.load(open("word_vecs","rb"))
 
-        start_wd = "democrats"
-        inputs = np.array([[word_vector[w2i[start_wd]]]])
+        start_wd = ["president", "@hillaryclinton", "democrats", "white", "there"]
+        input_list = [np.array([[word_vector[w2i[item]]]]) for item in start_wd]
 
         model = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
         saver = tf.train.Saver()
@@ -50,20 +50,23 @@ if __name__ == '__main__':
         op_words = []
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
-            init_state = tuple([np.zeros((1,300)) for i in range(2)])
-            ct = 0
-            while (True):
-                feed_dict = model.create_feed_dict(inputs=inputs, in_state = init_state)   
-                probs, in_state, next_state = sess.run([model.logits, model.in_state, model.next_state], feed_dict = feed_dict)
-                init_state = next_state
-                op_words.append(i2w[np.argmax(probs)])
-                if ((op_words[-1] == "_E_".lower() or ct == 100)):
-                    break
-                inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
-                ct += 1
 
-        print "######### Generated Sentence ############"
-        print start_wd + " " + " ".join(op_words[:-1])
+            for i in raneg(len(input_list)):
+                ct = 0
+                inputs = input_list[i]
+                init_state = tuple([np.zeros((1,300)) for i in range(2)])
+                while (True):
+                    feed_dict = model.create_feed_dict(inputs=inputs, in_state = init_state)   
+                    probs, in_state, next_state = sess.run([model.logits, model.in_state, model.next_state], feed_dict = feed_dict)
+                    init_state = next_state
+                    op_words.append(i2w[np.argmax(probs)])
+                    if ((op_words[-1] == "_E_".lower() or ct == 100)):
+                        break
+                    inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
+                    ct += 1
+
+                print "######### Generated Sentence ############"
+                print start_wd + " " + " ".join(op_words[:-1])
 
 
 
