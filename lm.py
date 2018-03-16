@@ -22,7 +22,7 @@ class LanguageModel(object):
         self.add_train_op()
         self.create_summary()
 
-    def create_feed_dict(self, inputs, labels=None, next_state = None):
+    def create_feed_dict(self, inputs, labels=None, in_state = None):
         feed_dict = {}
         feed_dict[self.inputs] = inputs
 
