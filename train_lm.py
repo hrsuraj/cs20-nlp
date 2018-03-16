@@ -40,7 +40,7 @@ if __name__ == '__main__':
         i2w = dill.load(open("i2w","rb"))
         word_vector = dill.load(open("word_vecs","rb"))
 
-        start_wd = ["president", "@hillaryclinton", "democrats", "tax", "there", "congress", "business", "the", "my", "daughter", "i"]
+        start_wd = ["president", "@hillaryclinton", "democrats", "tax", "there", "congress", "business", "the", "my", "daughter", "i" ,"ivanka"]
         input_list = [np.array([[word_vector[w2i[item]]]]) for item in start_wd]
 
         model = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
