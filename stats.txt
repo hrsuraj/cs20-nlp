@@ -1,38 +1,38 @@
-Trump's vocabulary size: 19778
+Trump's vocabulary size: 19800
 
 ********************
 
 Top 50 most common words:
 
 _e_: 19469
-the: 13990
-to: 8615
+the: 13989
+to: 8614
 __http__: 7367
-a: 6433
+a: 6432
 and: 6069
-is: 5703
+is: 5702
 of: 5597
 in: 5491
-on: 3857
+on: 3856
 for: 3790
-i: 3723
+i: 3722
 be: 3211
 will: 3163
-you: 3140
+you: 3138
 great: 2562
-: 2499
-at: 2270
+: 2498
+at: 2269
 that: 2237
 with: 2195
 it: 2193
 are: 2128
-we: 1835
+we: 1834
 our: 1787
 trump: 1782
 have: 1771
 my: 1734
 by: 1562
-he: 1518
+he: 1517
 not: 1478
 all: 1439
 was: 1341
@@ -42,7 +42,7 @@ this: 1240
 they: 1174
 people: 1107
 me: 1100
-thank: 1098
+thank: 1097
 from: 1080
 obama: 1062
 us: 1059
