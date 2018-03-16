@@ -35,6 +35,8 @@ if __name__ == '__main__':
         with tf.Session() as sess:
             sess.run(init)
             cbow.fit(sess, inputs, embed_data_path=args.embed_metadata, minibatch_size=args.minibatch_size, num_epochs=args.num_epochs, folder=args.folder, graph_folder=args.graphs)
+            final_embed = sess.run(cbow.init_vecs)
+            dill.dump(final_embed, open('word_vecs','wb'))
     else:
         model = cbow
         saver = tf.train.Saver()
