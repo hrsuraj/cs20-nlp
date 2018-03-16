@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # Load model of last epoch
     saver = tf.train.Saver()
     with tf.Session() as sess:
-        saver.restore(sess, '../word_vec_models/epoch_100/model.ckpt')
+        saver.restore(sess, '../word_vec_models/epoch_30/model.ckpt')
         # Visualizing embeddings
         final_embed = sess.run(model.word_vecs)
         config = projector.ProjectorConfig()
