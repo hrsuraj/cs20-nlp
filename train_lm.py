@@ -52,8 +52,9 @@ if __name__ == '__main__':
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
             for i in range(1):
                 feed_dict = model.create_feed_dict(inputs=inputs)   
-                probs, next_state = sess.run([model.logits, model.in_state], feed_dict = feed_dict)
-                print next_state[0].shape
+                probs, in_state, next_state = sess.run([model.logits, model.in_state, model.next_state], feed_dict = feed_dict)
+                print in_state[0].shape
+                print next_state[0]
                 op_words.append(i2w[np.argmax(probs.shape)])
                 inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
 
