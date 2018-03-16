@@ -51,4 +51,7 @@ if __name__ == '__main__':
             for i in range(1):
                 feed_dict = model.create_feed_dict(inputs=inputs)   
                 probs = sess.run(model.logits, feed_dict = feed_dict)
-                print probs.shape
+                print word_vector[np.argmax(probs.shape)]
+
+
+
