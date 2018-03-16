@@ -21,9 +21,13 @@ class LanguageModel(object):
         self.add_train_op()
         self.create_summary()
 
-    def create_feed_dict(self, inputs, labels=None):
+    def create_feed_dict(self, inputs, labels=None, next_state = None):
         feed_dict = {}
         feed_dict[self.inputs] = inputs
+
+        if not next_state is None:
+            feed_dict[self.next_state] = next_state
+
         if not labels is None:
             feed_dict[self.labels] = labels
         return feed_dict
@@ -31,7 +35,8 @@ class LanguageModel(object):
     def add_placeholders(self):
         self.inputs = tf.placeholder(shape=(None, self.num_steps, 300), dtype=tf.float32)
         self.labels = tf.placeholder(shape=(None, self.num_steps, self.vocab_len), dtype=tf.float32)
-
+        self.next_state = tf.placeholder(shape = (None, self.hidden_sizes[0]*len(self.hidden_sizes)))
+    
     def length_max(self, sequence):
         used = tf.sign(tf.reduce_max(tf.abs(sequence), 2))
         length = tf.reduce_sum(used, 1)
@@ -43,10 +48,12 @@ class LanguageModel(object):
         layers = [tf.nn.rnn_cell.GRUCell(size) for size in self.hidden_sizes]
         cells = tf.nn.rnn_cell.MultiRNNCell(layers)
         zero_states = cells.zero_state(self.batch_size, dtype=tf.float32)
+        
+        # Use when training
         self.in_state = tuple([tf.placeholder_with_default(state, [None, state.shape[1]]) 
                                 for state in zero_states])
     
-        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, self.length_max(self.inputs), self.in_state)
+        self.output, _ = tf.nn.dynamic_rnn(cells, self.inputs, self.length_max(self.inputs), self.next_state)
 
         self.logits = tf.layers.dense(self.output, self.vocab_len, activation=None)
 
