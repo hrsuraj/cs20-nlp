@@ -26,7 +26,7 @@ class LanguageModel(object):
         feed_dict = {}
         feed_dict[self.inputs] = inputs
 
-        if not next_state is None:
+        if not in_state is None:
             feed_dict[self.in_state] = in_state
 
         if not labels is None:
