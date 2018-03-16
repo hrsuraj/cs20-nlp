@@ -49,6 +49,6 @@ if __name__ == '__main__':
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
             for i in range(1):
-                feed_dict = self.create_feed_dict(inputs=inputs)   
+                feed_dict = model.create_feed_dict(inputs=inputs)   
                 probs = sess.run(self.logits, feed_dict = feed_dict)
                 print probs.shape
