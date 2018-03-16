@@ -55,7 +55,7 @@ class LanguageModel(object):
     
         self.output, self.next_state = tf.nn.dynamic_rnn(cells, self.inputs, self.length_max(self.inputs), self.in_state)
 
-        # self.in_state = self.next_state
+        self.in_state = self.next_state
         
         self.logits = tf.layers.dense(self.output, self.vocab_len, activation=None)
 
