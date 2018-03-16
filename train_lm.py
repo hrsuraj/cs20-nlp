@@ -37,6 +37,7 @@ if __name__ == '__main__':
     else:
         tweets = dill.load(open("tweets", "rb"))
         w2i = dill.load(open("w2i","rb"))
+        i2w = dill.load(open("i2w","rb"))
         word_vector = dill.load(open("word_vecs","rb"))
 
         start_wd = "@hillaryclinton"
@@ -51,7 +52,7 @@ if __name__ == '__main__':
             for i in range(1):
                 feed_dict = model.create_feed_dict(inputs=inputs)   
                 probs = sess.run(model.logits, feed_dict = feed_dict)
-                print word_vector[np.argmax(probs.shape)]
+                print i2w[np.argmax(probs.shape)]
 
 
 
