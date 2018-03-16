@@ -47,12 +47,16 @@ if __name__ == '__main__':
         saver = tf.train.Saver()
         folder = args.folder
 
+        op_words = []
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
-            for i in range(1):
+            for i in range(30):
                 feed_dict = model.create_feed_dict(inputs=inputs)   
                 probs = sess.run(model.logits, feed_dict = feed_dict)
-                print i2w[np.argmax(probs.shape)]
+                op_words.append(i2w[np.argmax(probs.shape)])
+                inputs = op_words[-1]
+
+        print " ".join(op_words)
 
 
 
