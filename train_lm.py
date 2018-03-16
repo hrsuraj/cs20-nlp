@@ -40,7 +40,7 @@ if __name__ == '__main__':
         i2w = dill.load(open("i2w","rb"))
         word_vector = dill.load(open("word_vecs","rb"))
 
-        start_wd = "president"
+        start_wd = "@hillaryclinton"
         inputs = np.array([[word_vector[w2i[start_wd]]]])
 
         model = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
@@ -63,7 +63,7 @@ if __name__ == '__main__':
                 ct += 1
 
         print "######### Generated Sentence ############"
-        print start_wd + " ".join(op_words[:-1])
+        print start_wd + " " + " ".join(op_words[:-1])
 
 
 
