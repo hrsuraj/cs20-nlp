@@ -17,14 +17,14 @@ class CBOW(object):
         self.V = V
         # self.D = D
         self.lr = lr
-        self.build()
+        # self.build()
     
-    # def build(self):
-    #     self.add_placeholders()
-    #     self.forward_prop()
-    #     self.add_loss_op()
-    #     self.add_train_op()
-    #     self.create_summary()
+    def build(self):
+        self.add_placeholders()
+        self.forward_prop()
+        self.add_loss_op()
+        self.add_train_op()
+        self.create_summary()
     
     def create_feed_dict(self, inputs, labels=None):
         # inputs and labels are integers corresponding to the indices of words
