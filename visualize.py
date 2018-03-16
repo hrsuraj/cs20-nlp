@@ -28,7 +28,7 @@ if __name__ == '__main__':
         saver.restore(sess, args.model_ckpt)
         # Visualizing embeddings
         final_embed = sess.run(model.init_vecs)
-        embedding_var = tf.Variable(final_embed_matrix[:args.num_embed], name='embedding')
+        embedding_var = tf.Variable(final_embed[:args.num_embed], name='embedding')
         sess.run(embedding_var.initializer)
         config = projector.ProjectorConfig()
         summary_writer = tf.summary.FileWriter('final_embeddings')
