@@ -2,6 +2,7 @@ import dill
 import tensorflow as tf
 
 from cbow import CBOW
+from tensorflow.contrib.tensorboard.plugins import projector
 
 ###############################################################################
 
