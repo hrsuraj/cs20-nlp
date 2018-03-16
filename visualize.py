@@ -1,4 +1,4 @@
-import numpy as np
+import dill
 import tensorflow as tf
 
 from cbow import CBOW
