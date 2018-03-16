@@ -17,7 +17,6 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         saver.restore(sess, '../word_vec_models/epoch_1/model.ckpt')
         # Visualizing embeddings
-        # final_embed = dill.load(open('word_vecs','rb'))
         config = projector.ProjectorConfig()
         summary_writer = tf.summary.FileWriter('final_embeddings')
         embedding = config.embeddings.add()
@@ -26,4 +25,3 @@ if __name__ == '__main__':
         projector.visualize_embeddings(summary_writer, config)
         saver_embed = tf.train.Saver([model.init_vecs])
         saver_embed.save(sess, '../word_vec_graphs/projector.ckpt')
-        # dill.dump(final_embed, open('word_vecs','wb'))
