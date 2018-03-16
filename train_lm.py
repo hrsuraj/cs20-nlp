@@ -59,7 +59,7 @@ if __name__ == '__main__':
                 inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
 
                 print init_state
-                print inputs
+                print op_words[-1]
 
         print " ".join(op_words)
 
