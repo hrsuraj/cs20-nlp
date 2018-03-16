@@ -50,5 +50,5 @@ if __name__ == '__main__':
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
             for i in range(1):
                 feed_dict = model.create_feed_dict(inputs=inputs)   
-                probs = sess.run(self.logits, feed_dict = feed_dict)
+                probs = sess.run(model.logits, feed_dict = feed_dict)
                 print probs.shape
