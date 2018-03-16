@@ -40,7 +40,7 @@ if __name__ == '__main__':
         i2w = dill.load(open("i2w","rb"))
         word_vector = dill.load(open("word_vecs","rb"))
 
-        start_wd = "the"
+        start_wd = "president"
         inputs = np.array([[word_vector[w2i[start_wd]]]])
 
         model = LanguageModel(args.lr, args.num_steps, args.vocab_len, args.minibatch_size)
