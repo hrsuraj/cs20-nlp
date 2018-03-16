@@ -58,6 +58,9 @@ if __name__ == '__main__':
                 op_words.append(i2w[np.argmax(probs.shape)])
                 inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
 
+                print init_state
+                print inputs
+
         print " ".join(op_words)
 
 
