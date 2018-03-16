@@ -25,4 +25,4 @@ if __name__ == '__main__':
         embedding.metadata_path = './embeddings_metadata.tsv'
         projector.visualize_embeddings(summary_writer, config)
         saver_embed = tf.train.Saver([model.init_vecs])
-        saver_embed.save(sess, '../word_vec_graphs/test/')
+        saver_embed.save(sess, '../word_vec_graphs/projector.ckpt')
