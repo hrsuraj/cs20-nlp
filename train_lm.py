@@ -50,7 +50,7 @@ if __name__ == '__main__':
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
 
-            for i in range(len(input_list)):
+            for i in range(len(start_wd)):
                 ct = 0
                 inputs = input_list[i]
                 init_state = tuple([np.zeros((1,300)) for i in range(2)])
