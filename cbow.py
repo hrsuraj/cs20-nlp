@@ -63,22 +63,10 @@ class CBOW(object):
             writer.add_summary(summary, global_step=self.minibatch_count)
             self.minibatch_count += 1
             print('Minibatch ' + str(i) + ' out of : ' + str(len(minibatch_inputs)))
-        config = projector.ProjectorConfig()
-        embedding = config.embeddings.add()
-        embedding.tensor_name = self.word_vecs.name
-        embedding.metadata_path = embed_data_path
-        projector.visualize_embeddings(writer, config)
     
     def fit(self, sess, inputs, minibatch_size=64, num_epochs=100, folder='./', graph_folder='./', embed_data_path='./'):
         saver = tf.train.Saver(max_to_keep=200)
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
-        # Writing embeddings to logdir
-        config = projector.ProjectorConfig()
-        embedding = config.embeddings.add()
-        embedding.tensor_name = self.word_vecs.name
-        embedding.metadata_path = embed_data_path
-        projector.visualize_embeddings(writer, config)
-        # Finish writing initial embeddings
         indices = list(range(inputs.shape[1]))
         mid = len(indices) // 2
         other_indices = [idx for idx in indices if idx!=mid]
@@ -93,3 +81,13 @@ class CBOW(object):
             epoch_folder = os.path.join(folder, 'epoch_'+str(i+1))
             os.mkdir(epoch_folder)
             saver.save(sess, os.path.join(epoch_folder, 'model.ckpt'))
+        # Visualizing embeddings
+        final_embed = sess.run(self.word_vecs)
+        config = projector.ProjectorConfig()
+        summary_writer = tf.summary.FileWriter('final embeddings')
+        embedding = config.embeddings.add()
+        embedding.tensor_name = self.word_vecs.name
+        embedding.metadata_path = embed_data_path
+        projector.visualize_embeddings(summary_writer, config)
+        saver_embed = tf.train.Saver([self.word_vecs])
+        saver_embed.save(sess, graph_folder)
