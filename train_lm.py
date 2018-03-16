@@ -50,9 +50,9 @@ if __name__ == '__main__':
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
 
-            for i in range(len(start_wd)):
+            for j in range(len(start_wd)):
                 ct = 0
-                inputs = input_list[i]
+                inputs = input_list[j]
                 init_state = tuple([np.zeros((1,300)) for i in range(2)])
                 op_words = []
                 while (True):
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                     ct += 1
 
                 print "######### Generated Sentence ############"
-                print start_wd[i] + " " + " ".join(op_words[:-1])
+                print start_wd[j] + " " + " ".join(op_words[:-1])
 
 
 
