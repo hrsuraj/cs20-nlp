@@ -16,12 +16,12 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         saver.restore(sess, '../word_vec_models/epoch_30/model.ckpt')
         # Visualizing embeddings
-        final_embed = sess.run(model.word_vecs)
+        final_embed = sess.run(model.init_vecs)
         config = projector.ProjectorConfig()
         summary_writer = tf.summary.FileWriter('final embeddings')
         embedding = config.embeddings.add()
-        embedding.tensor_name = model.word_vecs.name
+        embedding.tensor_name = model.init_vecs.name
         embedding.metadata_path = embed_data_path
         projector.visualize_embeddings(summary_writer, config)
-        saver_embed = tf.train.Saver([model.word_vecs])
+        saver_embed = tf.train.Saver([model.init_vecs])
         saver_embed.save(sess, '../word_vec_graphs/')

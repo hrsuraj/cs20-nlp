@@ -17,7 +17,7 @@ class CBOW(object):
         self.V = V
         # self.D = D
         self.lr = lr
-        # self.build()
+        self.build()
     
     def build(self):
         self.add_placeholders()
