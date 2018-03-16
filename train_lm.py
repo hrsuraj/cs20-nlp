@@ -66,7 +66,7 @@ if __name__ == '__main__':
                     ct += 1
 
                 print "######### Generated Sentence ############"
-                print " ".join(op_words[:-1])
+                print start_wd[i] + " " + " ".join(op_words[:-1])
 
 
 
