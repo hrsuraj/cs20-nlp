@@ -50,10 +50,11 @@ if __name__ == '__main__':
         op_words = []
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
+            init_state = tuple([np.random.random((1,300)) for i in range(2)]
             for i in range(1):
-                feed_dict = model.create_feed_dict(inputs=inputs)   
+                feed_dict = model.create_feed_dict(inputs=inputs, next_state = init_state)   
                 probs, in_state, next_state = sess.run([model.logits, model.in_state, model.next_state], feed_dict = feed_dict)
-                print in_state[0].shape
+                print in_state[0]
                 # print np.array(next_state).shape
                 op_words.append(i2w[np.argmax(probs.shape)])
                 inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
