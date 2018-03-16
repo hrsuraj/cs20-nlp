@@ -22,7 +22,7 @@ if __name__ == '__main__':
         summary_writer = tf.summary.FileWriter('final embeddings')
         embedding = config.embeddings.add()
         embedding.tensor_name = model.init_vecs.name
-        embedding.metadata_path = embed_data_path
+        embedding.metadata_path = './embeddings_metadata.tsv'
         projector.visualize_embeddings(summary_writer, config)
         saver_embed = tf.train.Saver([model.init_vecs])
         saver_embed.save(sess, '../word_vec_graphs/')
