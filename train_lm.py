@@ -47,7 +47,6 @@ if __name__ == '__main__':
         saver = tf.train.Saver()
         folder = args.folder
 
-        op_words = []
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
 
@@ -55,6 +54,7 @@ if __name__ == '__main__':
                 ct = 0
                 inputs = input_list[i]
                 init_state = tuple([np.zeros((1,300)) for i in range(2)])
+                op_words = []
                 while (True):
                     feed_dict = model.create_feed_dict(inputs=inputs, in_state = init_state)   
                     probs, in_state, next_state = sess.run([model.logits, model.in_state, model.next_state], feed_dict = feed_dict)
