@@ -4,12 +4,14 @@ import numpy as np
 import os
 import tensorflow as tf
 
+from tensorflow.contrib.tensorboard.plugins import projector
+
 ###############################################################################
 
 class CBOW(object):
     
-    def __init__(self, V, init_vec, lr):
-        self.init_vec = tf.Variable(initial_value=init_vec, dtype=tf.float32, name='word_vectors')
+    def __init__(self, V, word_vecs, lr):
+        self.word_vecs = tf.Variable(initial_value=word_vecs, dtype=tf.float32, name='word_vectors')
         # self.word2idx = word2idx
         # self.idx2word = idx2word
         self.V = V
@@ -37,7 +39,7 @@ class CBOW(object):
         self.labels = tf.placeholder(shape=(None,), dtype=tf.int32)
     
     def forward_prop(self):
-        self.word_vecs = tf.nn.embedding_lookup(params=self.init_vec, ids=self.inputs)
+        self.word_vecs = tf.nn.embedding_lookup(params=self.word_vecs, ids=self.inputs)
         self.avg_vecs = tf.reduce_mean(self.word_vecs, axis=1)
         self.scores = tf.layers.dense(inputs=self.avg_vecs, units=self.V, kernel_initializer=tf.contrib.layers.xavier_initializer())
     
@@ -55,15 +57,28 @@ class CBOW(object):
         _, _, summary = sess.run([self.loss, self.train_op, self.summary], feed_dict=feed_dict)
         return summary
     
-    def run_epoch(self, sess, minibatch_inputs, minibatch_labels, writer):
+    def run_epoch(self, sess, minibatch_inputs, minibatch_labels, writer, embed_data_path):
         for i in range(len(minibatch_inputs)):
             summary = self.train_batch(sess, minibatch_inputs[i], minibatch_labels[i])
             writer.add_summary(summary, global_step=self.minibatch_count)
             self.minibatch_count += 1
+            print('Minibatch ' + str(i) + ' out of : ' + str(len(minibatch_inputs)))
+        config = projector.ProjectorConfig()
+        embedding = config.embeddings.add()
+        embedding.tensor_name = self.word_vecs.name
+        embedding.metadata_path = embed_data_path
+        projector.visualize_embeddings(writer, config)
     
-    def fit(self, sess, inputs, minibatch_size=64, num_epochs=100, folder='./', graph_folder='./'):
+    def fit(self, sess, inputs, minibatch_size=64, num_epochs=100, folder='./', graph_folder='./', embed_data_path='./'):
         saver = tf.train.Saver(max_to_keep=200)
         writer = tf.summary.FileWriter(graph_folder, sess.graph)
+        # Writing embeddings to logdir
+        config = projector.ProjectorConfig()
+        embedding = config.embeddings.add()
+        embedding.tensor_name = self.word_vecs.name
+        embedding.metadata_path = embed_data_path
+        projector.visualize_embeddings(writer, config)
+        # Finish writing initial embeddings
         indices = list(range(inputs.shape[1]))
         mid = len(indices) // 2
         other_indices = [idx for idx in indices if idx!=mid]
@@ -74,7 +89,7 @@ class CBOW(object):
         minibatch_labels = np.array_split(labels, num_minibatches)
         self.minibatch_count = 0
         for i in range(num_epochs):
-            self.run_epoch(sess, minibatch_inputs, minibatch_labels, writer)
+            self.run_epoch(sess, minibatch_inputs, minibatch_labels, writer, embed_data_path)
             epoch_folder = os.path.join(folder, 'epoch_'+str(i+1))
             os.mkdir(epoch_folder)
             saver.save(sess, os.path.join(epoch_folder, 'model.ckpt'))
