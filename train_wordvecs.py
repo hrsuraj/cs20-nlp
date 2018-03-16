@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', required=True, choices=['train', 'test'], dest='mode')
     parser.add_argument('--init_vec', required=True, dest='init_vec')
     parser.add_argument('--train_samples', required=True, dest='samples')
-    parser.add_argument('--embed_metadata', required=True, dest='embed_metadata', default='./embeddings_metadata.tsv')
+    parser.add_argument('--embed_metadata', required=False, dest='embed_metadata', default='./embeddings_metadata.tsv')
     parser.add_argument('--lr', type=float, default=1e-3, dest='lr')
     parser.add_argument('--minibatch_size', type=int, default=64, dest='minibatch_size')
     parser.add_argument('--num_epochs', type=int, default=100, dest='num_epochs')
@@ -41,5 +41,5 @@ if __name__ == '__main__':
         folder = args.folder
         with tf.Session() as sess:
             saver.restore(sess, os.path.join(folder, 'model.ckpt'))
-            word_vecs = sess.run(model.init_vec)
+            word_vecs = sess.run(model.word_vecs)
             dill.dump(word_vecs, open('word_vecs', 'wb'))

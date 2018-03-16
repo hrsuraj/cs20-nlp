@@ -81,13 +81,3 @@ class CBOW(object):
             os.mkdir(epoch_folder)
             saver.save(sess, os.path.join(epoch_folder, 'model.ckpt'))
             print('Epoch ' + str(i+1) + ' completed')
-        # Visualizing embeddings
-        final_embed = sess.run(self.word_vecs)
-        config = projector.ProjectorConfig()
-        summary_writer = tf.summary.FileWriter('final embeddings')
-        embedding = config.embeddings.add()
-        embedding.tensor_name = self.word_vecs.name
-        embedding.metadata_path = embed_data_path
-        projector.visualize_embeddings(summary_writer, config)
-        saver_embed = tf.train.Saver([self.word_vecs])
-        saver_embed.save(sess, graph_folder)
