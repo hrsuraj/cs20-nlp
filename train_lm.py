@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 probs, in_state, next_state = sess.run([model.logits, model.in_state, model.next_state], feed_dict = feed_dict)
                 init_state = next_state
                 op_words.append(i2w[np.argmax(probs)])
-                if ((op_words[-1] == "_E_".lower() || ct == 100)):
+                if ((op_words[-1] == "_E_".lower() or ct == 100)):
                     break
                 inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
                 ct += 1
