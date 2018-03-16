@@ -31,10 +31,10 @@ if __name__ == '__main__':
         embedding_var = tf.Variable(final_embed[:args.num_embed], name='embedding')
         sess.run(embedding_var.initializer)
         config = projector.ProjectorConfig()
-        summary_writer = tf.summary.FileWriter('final_embeddings')
+        summary_writer = tf.summary.FileWriter(args.graph_folder)
         embedding = config.embeddings.add()
         embedding.tensor_name = embedding_var.name
-        embedding.metadata_path = args.metadata
+        embedding.metadata_path = os.path.join(args.graph_folder, args.metadata)
         projector.visualize_embeddings(summary_writer, config)
         saver_embed = tf.train.Saver([embedding_var])
         saver_embed.save(sess, os.path.join(args.graph_folder, 'projector.ckpt'))
