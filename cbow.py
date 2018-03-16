@@ -11,7 +11,7 @@ from tensorflow.contrib.tensorboard.plugins import projector
 class CBOW(object):
     
     def __init__(self, V, word_vecs, lr):
-        self.word_vecs = tf.Variable(initial_value=word_vecs, dtype=tf.float32, name='word_vectors')
+        self.init_vecs = tf.Variable(initial_value=word_vecs, dtype=tf.float32, name='word_vectors')
         # self.word2idx = word2idx
         # self.idx2word = idx2word
         self.V = V
@@ -39,7 +39,7 @@ class CBOW(object):
         self.labels = tf.placeholder(shape=(None,), dtype=tf.int32)
     
     def forward_prop(self):
-        self.word_vecs = tf.nn.embedding_lookup(params=self.word_vecs, ids=self.inputs)
+        self.word_vecs = tf.nn.embedding_lookup(params=self.init_vecs, ids=self.inputs)
         self.avg_vecs = tf.reduce_mean(self.word_vecs, axis=1)
         self.scores = tf.layers.dense(inputs=self.avg_vecs, units=self.V, kernel_initializer=tf.contrib.layers.xavier_initializer())
     
