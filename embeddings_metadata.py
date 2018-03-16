@@ -6,13 +6,13 @@ import dill
 def create_embeddings_metadata(path2dict, save_path, num_words):
     idx2word = dill.load(open(path2dict, 'rb'))
     with open(save_path, 'w') as f:
-        f.write('Index\tWord\n')
+        f.write('Word\tIndex\n')
         if num_words == -1:
             for idx in range(len(idx2word)):
-                f.write(str(idx) + '\t' + idx2word[idx] + '\n')
+                f.write(idx2word[idx] + '\t' + str(idx) + '\n')
         else:
             for idx in range(num_words):
-                f.write(str(idx) + '\t' + idx2word[idx] + '\n')
+                f.write(idx2word[idx] + '\t' + str(idx) + '\n')
 
 ###############################################################################
 
