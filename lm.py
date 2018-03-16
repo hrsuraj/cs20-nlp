@@ -35,7 +35,7 @@ class LanguageModel(object):
     def add_placeholders(self):
         self.inputs = tf.placeholder(shape=(None, self.num_steps, 300), dtype=tf.float32)
         self.labels = tf.placeholder(shape=(None, self.num_steps, self.vocab_len), dtype=tf.float32)
-        self.in_state = tf.placeholder(shape = (len(self.hidden_sizes), self.batch_size, self.hidden_sizes[0]), dtype = tf.float32)
+        self.in_state = None
     
     def length_max(self, sequence):
         used = tf.sign(tf.reduce_max(tf.abs(sequence), 2))
