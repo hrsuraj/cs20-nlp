@@ -62,7 +62,8 @@ if __name__ == '__main__':
                 inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
                 ct += 1
 
-        print " ".join(op_words)
+        print "######### Generated Sentence ############"
+        print start_wd + " ".join(op_words[:-1])
 
 
 
