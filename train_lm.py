@@ -53,9 +53,9 @@ if __name__ == '__main__':
             for i in range(5):
                 feed_dict = model.create_feed_dict(inputs=inputs)   
                 probs, next_state = sess.run([model.logits, model.in_state], feed_dict = feed_dict)
-                print next_state.shape
-        #         op_words.append(i2w[np.argmax(probs.shape)])
-        #         inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
+                print next_state
+                op_words.append(i2w[np.argmax(probs.shape)])
+                inputs = np.array([[word_vector[w2i[op_words[-1]]]]])
 
         # print " ".join(op_words)
 
